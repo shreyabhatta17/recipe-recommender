@@ -1,0 +1,6 @@
+{
+  "best_alpha": 1.0,
+  "best_lambda": 1.0,
+  "best_n_factors": 20,
+  "cold_start_threshold": 5
+}

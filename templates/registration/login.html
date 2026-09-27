@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Sign in · Savorly{% endblock %}
+{% block content %}
+<section class="login-layout mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-20">
+    <div class="login-intro">
+        <p class="eyebrow mb-5"><span class="eyebrow-dot" aria-hidden="true"></span>Welcome back</p>
+        <h1 class="font-display text-5xl leading-[.98] tracking-tight sm:text-7xl">Make room for<br><em class="text-leaf">something good.</em></h1>
+        <p class="mt-7 max-w-md text-base leading-7 text-ink/60">Sign in to return to a quieter way of deciding what’s for dinner.</p>
+        <div class="login-note mt-12 hidden max-w-sm items-start gap-4 sm:flex"><span class="note-line" aria-hidden="true"></span><p class="text-sm leading-6 text-ink/55">Your recommendations are shaped by what you view and cook, one meal at a time.</p></div>
+    </div>
+    <div class="login-panel">
+        <div class="mb-7"><h2 class="font-display text-3xl">Sign in to Savorly</h2><p class="mt-2 text-sm text-ink/55">Use your account details below.</p></div>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {% if form.errors %}<div class="form-alert mb-6" role="alert">That username and password didn’t match. Please try again.</div>{% endif %}
+            <label for="id_username">Username</label>
+            <input type="text" name="username" id="id_username" autocomplete="username" required autofocus placeholder="Your username">
+            <label for="id_password">Password</label>
+            <input type="password" name="password" id="id_password" autocomplete="current-password" required placeholder="Your password">
+            <input type="hidden" name="next" value="{{ next|default:'/' }}">
+            <button type="submit" class="primary-button mt-7">Continue</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+# Pinned to match the versions the Colab artefacts were pickled with --
+# mismatched versions can silently fail to unpickle or behave differently.
+Django==5.1.*
+python-dotenv>=1.0
+django-jazzmin==3.0.*
+djangorestframework==3.15.*
+scikit-learn==1.6.1
+scipy==1.16.3
+pandas==2.2.3
+numpy==2.1.3
+pyarrow>=17.0

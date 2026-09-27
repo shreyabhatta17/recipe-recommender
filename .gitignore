@@ -1,0 +1,37 @@
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Local databases
+db.sqlite3
+
+# Local processed dataset exports
+data/
+
+# Python caches and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Test/runtime output and local clutter
+.pytest_cache/
+*.log
+*.bak
+*~
+.DS_Store
+.ipynb_checkpoints/
+
+# Demo-only recipe images
+static/images/recipes/*.jpg
+
+# JavaScript dependencies
+node_modules/
+
+# IDE metadata
+.vscode/
+.idea/

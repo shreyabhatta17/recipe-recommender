@@ -1,0 +1,44 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f4f7f2">
+    <title>{% block title %}Savorly{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { ink: '#17231F', canvas: '#F4F7F2', leaf: '#2F6654', citrus: '#E8B84A', berry: '#B95C55', mist: '#DDE8E0' }, fontFamily: { display: ['DM Serif Display', 'Georgia', 'serif'], sans: ['DM Sans', 'Arial', 'sans-serif'] } } } };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-canvas text-ink antialiased">
+    <nav class="border-b border-ink/10 bg-canvas" aria-label="Primary navigation">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
+            <a href="/" class="brand-mark flex items-center gap-3" aria-label="Savorly home">
+                <span class="brand-symbol" aria-hidden="true">S</span>
+                <span class="font-display text-[1.65rem] leading-none tracking-tight">Savorly</span>
+            </a>
+            {% if user.is_authenticated %}
+            <div class="flex items-center gap-4 text-sm font-semibold">
+                <span class="hidden text-ink/55 sm:inline">Cooking for {{ user.get_short_name|default:user.username }}</span>
+                <a href="{% url 'kitchen' %}" class="nav-button">Kitchen</a>
+                <form method="post" action="{% url 'logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-button">Log out</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+    <main>{% block content %}{% endblock %}</main>
+    <footer class="mx-auto max-w-7xl border-t border-ink/10 px-5 py-7 text-sm text-ink/50">
+        <p>Thoughtfully matched recipes for real-life cooking.</p>
+    </footer>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
