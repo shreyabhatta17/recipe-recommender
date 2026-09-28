@@ -4,11 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f4f7f2">
+    <meta name="theme-color" content="#F2F3E8">
     <title>{% block title %}Savorly{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { theme: { extend: { colors: { ink: '#17231F', canvas: '#F4F7F2', leaf: '#2F6654', citrus: '#E8B84A', berry: '#B95C55', mist: '#DDE8E0' }, fontFamily: { display: ['DM Serif Display', 'Georgia', 'serif'], sans: ['DM Sans', 'Arial', 'sans-serif'] } } } };
+        tailwind.config = { theme: { extend: { colors: { ink: 'var(--ink)', canvas: 'var(--canvas)', surface: 'var(--surface)', olive: 'var(--olive)', 'olive-deep': 'var(--olive-deep)', sage: 'var(--sage)', mist: 'var(--mist)', ochre: 'var(--ochre)', clay: 'var(--clay)' }, fontFamily: { display: ['DM Serif Display', 'Georgia', 'serif'], sans: ['DM Sans', 'Arial', 'sans-serif'] } } } };
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body class="bg-canvas text-ink antialiased">
-    <nav class="border-b border-ink/10 bg-canvas" aria-label="Primary navigation">
+    <nav class="border-b border-olive/30 bg-canvas" aria-label="Primary navigation">
         <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
             <a href="/" class="brand-mark flex items-center gap-3" aria-label="Savorly home">
                 <span class="brand-symbol" aria-hidden="true">S</span>
@@ -25,7 +25,7 @@
             </a>
             {% if user.is_authenticated %}
             <div class="flex items-center gap-4 text-sm font-semibold">
-                <span class="hidden text-ink/55 sm:inline">Cooking for {{ user.get_short_name|default:user.username }}</span>
+                <span class="hidden text-ink/70 sm:inline">Cooking for {{ user.get_short_name|default:user.username }}</span>
                 <a href="{% url 'kitchen' %}" class="nav-button">Kitchen</a>
                 <form method="post" action="{% url 'logout' %}" class="inline">
                     {% csrf_token %}
@@ -36,7 +36,7 @@
         </div>
     </nav>
     <main>{% block content %}{% endblock %}</main>
-    <footer class="mx-auto max-w-7xl border-t border-ink/10 px-5 py-7 text-sm text-ink/50">
+    <footer class="mx-auto max-w-7xl border-t border-olive/30 px-5 py-7 text-sm text-ink/70">
         <p>Thoughtfully matched recipes for real-life cooking.</p>
     </footer>
     {% block scripts %}{% endblock %}

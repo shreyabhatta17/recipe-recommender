@@ -1,22 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Kitchen · Savorly{% endblock %}
 {% block content %}
 <section class="mx-auto max-w-7xl px-5 pb-16 pt-12 lg:px-8 lg:pb-24 lg:pt-16">
-    <header class="recommendation-header mb-12 grid gap-8 border-b border-ink/10 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
+    <header class="recommendation-header mb-12 grid gap-8 border-b border-olive/30 pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
         <div class="max-w-3xl">
             <p class="eyebrow mb-4"><span class="eyebrow-dot" aria-hidden="true"></span>Your cooked recipes</p>
-            <h1 class="font-display text-5xl leading-[.98] tracking-tight sm:text-7xl">Meals worth<br><em class="text-leaf">remembering.</em></h1>
-            <p class="mt-6 max-w-xl text-base leading-7 text-ink/60 sm:text-lg">A working record of the recipes you’ve made. Keep the good ones close.</p>
+            <h1 class="font-display text-5xl leading-[.98] tracking-tight sm:text-7xl">Meals worth<br><em class="text-olive-deep">remembering.</em></h1>
+            <p class="mt-6 max-w-xl text-base leading-7 text-ink/70 sm:text-lg">A working record of the recipes you’ve made. Keep the good ones close.</p>
         </div>
         <div class="hidden max-w-[12rem] justify-self-end text-right lg:block">
             <div class="ingredient-mark" aria-hidden="true"><span></span><span></span><span></span></div>
-            <p class="mt-3 text-sm leading-5 text-ink/50">Cooked by you,<br>kept in one place.</p>
+            <p class="mt-3 text-sm leading-5 text-ink/70">Cooked by you,<br>kept in one place.</p>
         </div>
     </header>
 
     <div class="mb-7 flex items-end justify-between gap-4">
-        <div><p class="mb-2 text-sm font-semibold text-leaf">Your kitchen</p><h2 class="font-display text-4xl tracking-tight sm:text-5xl">Cooked before</h2></div>
-        {% if cooked_recipes %}<span class="text-right text-sm font-semibold text-ink/50">{{ cooked_recipes|length }} {% if cooked_recipes|length == 1 %}recipe{% else %}recipes{% endif %}</span>{% endif %}
+        <div><p class="mb-2 text-sm font-semibold text-olive-deep">Your kitchen</p><h2 class="font-display text-4xl tracking-tight sm:text-5xl">Cooked before</h2></div>
+        {% if cooked_recipes %}<span class="text-right text-sm font-semibold text-ink/70">{{ cooked_recipes|length }} {% if cooked_recipes|length == 1 %}recipe{% else %}recipes{% endif %}</span>{% endif %}
     </div>
 
     {% if cooked_recipes %}
@@ -28,17 +29,17 @@
                 {% if item.recipe.image_url %}
                 <div class="recipe-art"><img src="{{ item.recipe.image_url }}" alt="" class="h-full w-full object-cover"></div>
                 {% else %}
-                <div class="recipe-art flex h-full items-end justify-between p-6" style="background:{{ item.placeholder_background }};color:{{ item.placeholder_foreground }}">
+                <div class="recipe-art placeholder-art flex h-full items-end justify-between p-6" data-placeholder-seed="{{ item.initial }}">
                     <span class="font-display text-8xl leading-none opacity-80">{{ item.initial }}</span><span class="relative z-10 mb-2 text-3xl opacity-60" aria-hidden="true">●</span>
                 </div>
                 {% endif %}
-                <span class="absolute left-4 top-4 bg-white/90 px-2.5 py-1 text-[11px] font-bold text-ink/65">Cooked by you</span>
+                <span class="absolute left-4 top-4 rounded bg-surface/95 px-2.5 py-1 text-[11px] font-bold text-ink">Cooked by you</span>
             </div>
             <div class="p-5">
                 <h3 class="min-h-[3.5rem] font-display text-2xl leading-tight">{{ item.recipe.title }}</h3>
-                <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink/55">
+                <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink/70">
                     <span>{{ item.interaction.created_at|date:"M j, Y" }}</span>
-                    <span class="h-1 w-1 rounded-full bg-citrus"></span>
+                    <span class="h-1 w-1 rounded-full bg-sage"></span>
                     <span>{% if item.recipe.minutes %}{{ item.recipe.minutes }} min{% else %}Time varies{% endif %}</span>
                 </div>
                 <div class="rating-display mt-4" aria-label="Your rating: {{ item.rating }} out of 5">
@@ -52,9 +53,10 @@
     {% else %}
     <section class="empty-panel" aria-labelledby="kitchen-empty-title">
         <h3 id="kitchen-empty-title" class="font-display text-3xl">Your kitchen is waiting.</h3>
-        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">You haven’t cooked anything yet. Head to your recommendations and find something good to get started.</p>
+        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">You haven’t cooked anything yet. Head to your recommendations and find something good to get started.</p>
         <a href="{% url 'recommendations' %}" class="primary-button mt-6 inline-block w-auto">Find a recipe</a>
     </section>
     {% endif %}
 </section>
 {% endblock %}
+{% block scripts %}<script src="{% static 'js/recommendations.js' %}"></script>{% endblock %}

@@ -16,12 +16,12 @@
         <div class="detail-content">
             <p class="eyebrow mb-4"><span class="eyebrow-dot" aria-hidden="true"></span>Recipe detail</p>
             <h1 class="font-display text-5xl leading-[.98] tracking-tight sm:text-7xl">{{ recipe.title }}</h1>
-            <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-ink/55">
+            <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-ink/70">
                 <span>{% if recipe.minutes %}{{ recipe.minutes }} min{% else %}Time varies{% endif %}</span>
-                <span class="h-1 w-1 rounded-full bg-citrus"></span>
+                <span class="h-1 w-1 rounded-full bg-sage"></span>
                 <span>{% if recipe.n_steps %}{{ recipe.n_steps }} steps{% else %}Steps not listed{% endif %}</span>
             </div>
-            <p class="mt-7 max-w-2xl text-base leading-8 text-ink/65">{{ description }}</p>
+            <p class="mt-7 max-w-2xl text-base leading-8 text-ink/70">{{ description }}</p>
 
             <div class="detail-actions mt-8" aria-label="Recipe actions">
                 <div class="rating-control" data-rating="{{ rating }}">
@@ -38,7 +38,7 @@
         </div>
     </article>
 
-    <div class="detail-reading mt-14 grid gap-12 border-t border-ink/10 pt-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
+    <div class="detail-reading mt-14 grid gap-12 border-t border-olive/30 pt-12 lg:grid-cols-[.7fr_1.3fr] lg:gap-20">
         <section aria-labelledby="ingredients-title">
             <p class="eyebrow mb-3"><span class="eyebrow-dot" aria-hidden="true"></span>Gather</p>
             <h2 id="ingredients-title" class="font-display text-4xl">Ingredients</h2>
@@ -47,7 +47,7 @@
                 {% for ingredient in ingredients %}<li>{{ ingredient }}</li>{% endfor %}
             </ul>
             {% else %}
-            <p class="mt-6 text-sm leading-7 text-ink/55">Not available</p>
+            <p class="mt-6 text-sm leading-7 text-ink/70">Not available</p>
             {% endif %}
         </section>
         <section aria-labelledby="steps-title">
@@ -58,7 +58,7 @@
                 {% for step in steps %}<li><span class="step-number" aria-hidden="true">{{ forloop.counter }}</span><p>{{ step }}</p></li>{% endfor %}
             </ol>
             {% else %}
-            <p class="mt-6 text-sm leading-7 text-ink/55">Not available</p>
+            <p class="mt-6 text-sm leading-7 text-ink/70">Not available</p>
             {% endif %}
         </section>
     </div>
