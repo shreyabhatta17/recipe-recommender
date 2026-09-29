@@ -8,6 +8,7 @@ from collections import defaultdict
 
 import numpy as np
 import pandas as pd
+from sklearn.metrics.pairwise import cosine_similarity
 
 RELEVANCE_THRESHOLD = 4  # a held-out rating >= this counts as "relevant"
 
@@ -30,6 +31,32 @@ def recall_at_k(recommended: list, relevant: set, k: int = 10) -> float:
     top_k = recommended[:k]
     hits = sum(1 for item in top_k if item in relevant)
     return hits / len(relevant)
+
+
+def catalogue_coverage(recommendation_lists, catalogue) -> float:
+    """Fraction of the catalogue appearing in at least one recommendation list."""
+    catalogue = set(catalogue)
+    if not catalogue:
+        return 0.0
+    recommended = {rid for recs in recommendation_lists for rid in recs}
+    return len(recommended & catalogue) / len(catalogue)
+
+
+def intra_list_diversity(
+    recommendation_lists,
+    tfidf_matrix,
+    recipe_id_to_row: dict,
+) -> float:
+    """Mean within-list pairwise dissimilarity, using ``1 - cosine``."""
+    diversities = []
+    for recipe_ids in recommendation_lists:
+        rows = [recipe_id_to_row[rid] for rid in recipe_ids if rid in recipe_id_to_row]
+        if len(rows) < 2:
+            continue
+        similarities = cosine_similarity(tfidf_matrix[rows])
+        upper = similarities[np.triu_indices(len(rows), k=1)]
+        diversities.append(float(1.0 - upper.mean()))
+    return float(np.mean(diversities)) if diversities else 0.0
 
 
 # --------------------------------------------------------------------------
@@ -194,6 +221,9 @@ def sampled_evaluate_ranked(
     k: int = 10,
     seed: int = 42,
     cold_start_max_interactions: int = 5,
+    tfidf_matrix=None,
+    recipe_id_to_row: dict | None = None,
+    catalogue=None,
 ) -> dict:
     """
     Same sampled-pool protocol as sampled_evaluate, but for functions that
@@ -212,6 +242,7 @@ def sampled_evaluate_ranked(
     all_items_arr = np.asarray(list(all_item_ids))
 
     rows = []
+    recommendation_lists = []
     for user_id, relevant in relevant_sets.items():
         seen = seen_by_user.get(user_id, set())
         excluded = seen | relevant
@@ -229,11 +260,12 @@ def sampled_evaluate_ranked(
         p = precision_at_k(ranked, relevant, k)
         r = recall_at_k(ranked, relevant, k)
         rows.append((user_id, p, r, train_counts.get(user_id, 0)))
+        recommendation_lists.append(ranked[:k])
 
     df = pd.DataFrame(rows, columns=["user_id", "precision", "recall", "n_train"])
     cold = df[df["n_train"] < cold_start_max_interactions]
 
-    return {
+    results = {
         "n_users": len(df),
         "precision@k": df["precision"].mean() if len(df) else float("nan"),
         "recall@k": df["recall"].mean() if len(df) else float("nan"),
@@ -241,6 +273,12 @@ def sampled_evaluate_ranked(
         "precision@k_cold": cold["precision"].mean() if len(cold) else float("nan"),
         "recall@k_cold": cold["recall"].mean() if len(cold) else float("nan"),
     }
+    if tfidf_matrix is not None and recipe_id_to_row is not None and catalogue is not None:
+        results["coverage"] = catalogue_coverage(recommendation_lists, catalogue)
+        results["intra_list_diversity"] = intra_list_diversity(
+            recommendation_lists, tfidf_matrix, recipe_id_to_row
+        )
+    return results
 
 
 def print_report(name: str, results: dict) -> None:
