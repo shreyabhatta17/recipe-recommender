@@ -7,7 +7,6 @@
 db.sqlite3
 
 # Local processed dataset exports
-data/
 
 # Python caches and compiled files
 __pycache__/
