@@ -1,7 +1,7 @@
 """
 Loads the processed recipes.parquet from Day 1's Colab pipeline into the
-live Recipe table. Run once after `migrate`, and again any time the
-underlying recipe catalogue changes.
+live Recipe table. Safe to run after every `migrate`: recipe_id is the
+primary key and existing rows are skipped.
 
 Usage:
     python manage.py import_recipes --path data/recipes.parquet
@@ -52,5 +52,12 @@ class Command(BaseCommand):
             ))
 
         batch_size = options["batch_size"]
+        existing_ids = set(
+            Recipe.objects.filter(recipe_id__in=[recipe.recipe_id for recipe in recipes])
+            .values_list("recipe_id", flat=True)
+        )
         Recipe.objects.bulk_create(recipes, batch_size=batch_size, ignore_conflicts=True)
-        self.stdout.write(self.style.SUCCESS(f"Imported {len(recipes):,} recipes."))
+        imported = len(recipes) - len(existing_ids)
+        self.stdout.write(self.style.SUCCESS(
+            f"Imported {imported:,} new recipes; skipped {len(existing_ids):,} existing recipes."
+        ))

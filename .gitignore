@@ -6,6 +6,9 @@
 # Local databases
 db.sqlite3
 
+# Generated static assets (recreated by collectstatic during deployment)
+staticfiles/
+
 # Local processed dataset exports
 
 # Python caches and compiled files
